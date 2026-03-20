@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Da Ideia ao Unicórnio</title>
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <!-- Turn.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/turn.js/3/turn.min.js"></script>
+
+  <style>
+  body {
+    background: radial-gradient(circle at center, #1e293b, #020617);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: 'Georgia', serif;
+  }
+
+  #book {
+    width: 1000px;
+    height: 650px;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+  }
+
+  .page {
+    background: #fdfcf7;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+
+  .page img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  /* Botões mais elegantes */
+  .controls {
+    position: absolute;
+    bottom: 30px;
+    width: 100%;
+    text-align: center;
+  }
+
+  button {
+    padding: 12px 25px;
+    margin: 8px;
+    border: none;
+    background: linear-gradient(135deg, #2563eb, #1e40af);
+    color: white;
+    cursor: pointer;
+    border-radius: 25px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+  }
+
+  button:hover {
+    transform: scale(1.05);
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  }
+#menu {
+  position: absolute;
+  left: 20px;
+  top: 20px;
+  width: 220px;
+  background: rgba(15, 23, 42, 0.95);
+  color: white;
+  padding: 15px;
+  border-radius: 10px;
+  font-size: 14px;
+}
+
+#menu h3 {
+  margin-top: 0;
+  font-size: 16px;
+  border-bottom: 1px solid #334155;
+  padding-bottom: 5px;
+}
+
+#menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#menu li {
+  padding: 8px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+#menu li:hover {
+  background: #1e40af;
+}
+
+#searchBox {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+#searchInput {
+  padding: 8px;
+  border-radius: 5px;
+  border: none;
+}
+
+#searchBox button {
+  padding: 8px 12px;
+  margin-left: 5px;
+}
+</style>
+</head>
+
+<body>
+<div id="menu">
+  <h3>Sumário</h3>
+  <ul>
+    <li onclick="goToPage(1)">Capa</li>
+    <li onclick="goToPage(6)">Prefácio</li>
+    <li onclick="goToPage(10)">Introdução</li>
+    <li onclick="goToPage(16)">Capítulo 1</li>
+    <li onclick="goToPage(21)">Capítulo 2</li>
+    <li onclick="goToPage(30)">Capítulo 3</li>
+    <li onclick="goToPage(38)">Capítulo 4</li>
+    <li onclick="goToPage(45)">Capítulo 5</li>
+    <li onclick="goToPage(51)">Capítulo 6</li>
+    <li onclick="goToPage(56)">Capítulo 7</li>
+    <li onclick="goToPage(60)">Capítulo 8</li>
+    <li onclick="goToPage(68)">Capítulo 9</li>
+    <li onclick="goToPage(75)">Capítulo 10</li>
+    <li onclick="goToPage(83)">Capítulo 11</li>
+    <li onclick="goToPage(86)">Conclusão</li>
+  </ul>
+</div>
+
+<div id="searchBox">
+  <input type="text" id="searchInput" placeholder="Buscar no livro...">
+  <button onclick="searchBook()">Buscar</button>
+</div>
+
+<div id="book"></div>
+
+<div class="controls">
+  <button onclick="prevPage()">⬅️ Anterior</button>
+  <button onclick="nextPage()">Próxima ➡️</button>
+</div>
+
+<script>
+function goToPage(page) {
+  $("#book").turn("page", page);
+}
+  // 🔥 QUANTIDADE DE PÁGINAS (ajuste se necessário)
+  const totalPages = 90;
+
+  const book = document.getElementById("book");
+
+  // Criar páginas automaticamente
+  for (let i = 1; i <= totalPages; i++) {
+    const page = document.createElement("div");
+    page.className = "page";
+
+    const img = document.createElement("img");
+    img.src = "pages/" + i + ".jpg";
+
+    page.appendChild(img);
+    book.appendChild(page);
+  }
+const index = {
+  "prefacio": 7,
+  "introducao": 11,
+  "inovacao": 16,
+  "ecossistema": 21,
+  "universidade": 31,
+  "transferencia": 38,
+  "centros": 45,
+  "startup": 51,
+  "deep tech": 56,
+  "financiamento": 60,
+  "politicas": 68,
+  "ecossistemas": 75,
+  "futuro": 83,
+  "conclusao": 86
+};
+
+function searchBook() {
+  const query = document.getElementById("searchInput").value.toLowerCase();
+
+  if (index[query]) {
+    $("#book").turn("page", index[query]);
+  } else {
+    alert("Termo não encontrado");
+  }
+}
+  // Iniciar o livro
+  $("#book").turn({
+    width: 900,
+    height: 600,
+    autoCenter: true,
+    display: "double"
+  });
+
+  // Botões
+  function nextPage() {
+    $("#book").turn("next");
+  }
+
+  function prevPage() {
+    $("#book").turn("previous");
+  }
+
+  // Teclado
+  document.addEventListener("keydown", function(e) {
+    if (e.key === "ArrowRight") nextPage();
+    if (e.key === "ArrowLeft") prevPage();
+  });
+
+</script>
+
+</body>
+</html>
